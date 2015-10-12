@@ -97,7 +97,7 @@ def epsilon(grammar,first):
 				if m.end()==len(i):
 					epsFlag = True
 					for s in i:
-						if "e" not in first[i]:
+						if "e" not in first[s]:
 							epsFlag= False
 							break
 					if epsFlag:
