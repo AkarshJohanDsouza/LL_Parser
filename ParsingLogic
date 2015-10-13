@@ -1,0 +1,195 @@
+class Stack:
+
+    def __init__(self):
+
+        self.items=list()
+
+        self.size=0
+
+    def push(self,element):
+
+        self.items.append(element)
+
+        self.size+=1
+
+    def insertAtZero(self,element):
+
+        self.items.insert(0,element)
+
+    def pop(self,element):
+
+        self.items.remove(element)
+
+        self.size-=1
+
+    def popSingleElement(self,element):
+
+        self.items.remove(element)
+
+        self.size-=1
+
+    def getList(self):
+
+        return self.items[0]
+
+    def display(self):
+
+        return self.items
+
+'''---------------------------------------------------------------------------
+
+LL Parsing Table
+
+-----------------------------------------------------
+
+  | id + * ( ) $
+
+------------------------------------------------------
+
+E | E->TE E->TE1 Sync Sync
+
+------------------------------------------------------
+
+E1| E->+TE1 E1->e E1->e
+
+------------------------------------------------------
+
+T | T->FT1 Sync T->FT1 Sync Sync
+
+------------------------------------------------------
+
+T1| T1->e T1->*FT1 T1->e T1->e
+
+------------------------------------------------------
+
+F | F->id Sync Sync F->(E) Sync Sync
+
+------------------------------------------------------
+
+-------------------------------------------------------------------------------
+
+'''
+
+table=dict()
+
+table['E']={'id':'E->T E1','+':'null','*':'null','(':'E-> T E1',')':'Sync','$':'Sync'}
+
+table['E1']={'id':'null','+':'E-> + T E1','*':'null','(':'Sync',')':'E1->e','$':'E1->e'}
+
+table['T']={'id':'T-> F T1','+':'Sync','*':'null','(':'T->F T1',')':'Sync','$':'Sync'}
+
+table['T1']={'id':'null','+':'T1-> e','*':'T1-> * F T1','(':'null',')':'T1-> e','$':'T1->e'}
+
+table['F']={'id':'F->id','+':'Sync','*':'Sync','(':'F->( E )',')':'Sync','$':'Sync'}
+
+'''Main Logic'''
+
+def ParsingLogic(inputStack):
+
+    print("{0:100} {1:100} {2:100}".format('Stack','Input','Actions'))
+
+    print("{0:100} {1:100} {2:100}".format('----------','----------','----------'))
+
+    OperationStack=Stack()
+
+    '''Intial Stack Content'''
+
+    OperationStack.push('E')
+
+    OperationStack.push('$')
+
+    while True:
+
+        if OperationStack.getList()=='$':
+
+            break
+
+        elif OperationStack.getList()=='e':
+
+            OperationStack.popSingleElement('e')
+
+        elif Equality(OperationStack.getList(),inputStack[0]):
+
+            print("{0:100} {1:100} {2:100}".format(str(OperationStack.display()),str(inputStack),'Matched'))
+
+            OperationStack.popSingleElement(inputStack[0])
+
+            inputStack.remove(inputStack[0])
+
+        elif Exists(OperationStack.getList(),inputStack[0]):
+
+            production=table[OperationStack.getList()][inputStack[0]]
+
+            print("{0:100} {1:100} {2:100}".format(str(OperationStack.display()),str(inputStack),str(production)))
+
+            production=((production.split('->'))[1].split())[::-1]
+
+            if production=='e':
+
+                OperationStack.popSingleElement(OperationStack.getList())
+
+            else:
+
+                OperationStack.popSingleElement(OperationStack.getList())
+
+                for Symbol in production:
+
+                    OperationStack.insertAtZero(Symbol)
+
+        elif ExistsSync(OperationStack.getList(),inputStack[0]):
+
+            print("{0:100} {1:100} {2:100}".format(str(OperationStack.display()),str(inputStack),'Skipped'))
+
+            inputStack.pop(0)
+
+        else:
+
+            print("{0:100} {1:100} {2:100}".format(str(OperationStack.display()),str(inputStack),'Error'))
+
+            break
+
+        
+
+            
+
+'''Starting Program'''
+
+def main():
+
+    ParsingString=input()
+
+    ParsingString=ParsingString.split()
+
+    ParsingString.append('$')
+
+    ParsingLogic(ParsingString)
+
+def Exists(row,column):
+
+    if not (table[row][column]=='null' or table[row][column]=='Sync'):
+
+        return True
+
+    else:
+
+        return False
+
+def ExistsSync(row,column):
+
+    if table[row][column]=='Sync':
+
+        return True
+
+    return False
+
+def Equality(a,b):
+
+    if a==b:
+
+        return True
+
+    return False
+
+if __name__=='__main__':
+
+    main()
