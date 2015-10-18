@@ -107,7 +107,7 @@ def epsilon(grammar,first):
 						if "e" in first[nt]:
 							first[nt].remove("e")
 
-
+'''
 f=open("grammar.txt","r")
 k=[]
 for i in f.readlines():
@@ -115,3 +115,4 @@ for i in f.readlines():
 grammar=mkdic(k)
 print(getFirst(grammar))
 f.close()
+'''
