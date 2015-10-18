@@ -18,7 +18,7 @@ def getFirst(grammar):
 		Lfirst = get_Lfirst(prod,grammar,first)
 		first[prod] = Lfirst
 	
-	for s in f:
+	for s in first:
 		Lfirst = list(set(first[s]))
 		first[s] = Lfirst
 
@@ -107,12 +107,12 @@ def epsilon(grammar,first):
 						if "e" in first[nt]:
 							first[nt].remove("e")
 
-'''
-f=open("grammar.txt","r")
+"""
+f=open("grammar1.txt","r")
 k=[]
 for i in f.readlines():
 	k.append(i.split('\n')[0])
 grammar=mkdic(k)
 print(getFirst(grammar))
 f.close()
-'''
+"""
