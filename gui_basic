@@ -1,0 +1,108 @@
+from tkinter import *
+grammar = ""
+#creating a main frame for grammar input field-----------
+root = Tk()
+gframe = Frame(root)
+gframe.grid(row = 0, column = 0 )
+gtext = Text(gframe,height = "20", bd = "10")
+gtext.pack(expand = True)
+
+def getGrammar():
+    inp = gtext.get("1.0",END)
+    inp = inp[0:len(inp)-1]
+    global grammar
+    grammar = inp
+    return inp                                                                      # contains the grammar
+
+def generate(): #the parseing table for the given grammar
+    top = Toplevel()
+    inp = getGrammar()
+    t = Text(top)
+    t.insert(INSERT, inp)                                            # should have the table
+    t.pack()
+    top.mainloop()
+
+def enterTable():
+    top = Toplevel()
+    rowLabel = Label(top, text="enter no. of rows (terminals + non-terminals) :")
+    rowLabel.pack()
+    rEntry = Entry(top, bd =5)
+    rEntry.pack()
+
+    colLabel = Label(top, text="enter no. of columns (states) : :")
+    colLabel.pack()
+    cEntry = Entry(top, bd =5)
+    cEntry.pack()
+    def go():
+        rows = rEntry.get()
+        cols = cEntry.get()
+        top.destroy()
+        print(rows +" "+cols)
+        makeTable(int(rows),int(cols))
+    button = Button(top,text = "OK!",width = "30", command = go)
+    button.pack()
+    top.mainloop()
+
+d = dict()    
+def makeTable(r,c): #as in the program required form
+    print("hi")
+    gframe.destroy()
+    bframe.destroy()
+    l = []
+    k=0
+    newFrame = Frame(root)
+    for i in range((r)):
+        for j in range((c)):
+            l.append(Entry(newFrame, bd = 3))
+            l[k].grid(row = i  , column = j)
+            k = k+1
+    def fetchTable():
+        pass
+    storeTableButton = Button(text = "fetch and parse" , width = "20", command = fetchTable)
+    storeTableButton.pack()
+    newFrame.pack()
+
+def parseGrammar():
+    inp = getGrammar()
+    global grammar
+    print(grammar)
+    #send it for first, follow everything
+
+    #
+    '''
+    top = Toplevel()
+    t = Text(top)
+    t.insert(INSERT, ___) # fill the stack representation
+    t.pack()
+    top.mainloop()
+    '''
+    
+def first():
+    getGrammar()
+    #send it to the first func
+
+def follow():
+    getGrammar()
+    #connect to the actual follw snippet
+    
+# a new frame for buttons (3)------------------------------
+bframe = Frame(root)
+bframe.grid(row = 0, column = 1)
+
+tableButton = Button(bframe, width = "50", text = "Generate Table", command = generate)
+tableButton.grid(row = 0, column = 0)
+
+enterButton = Button (bframe, width = "50" , text ="Enter Table", command = enterTable)
+enterButton.grid(row = 1, column = 0)
+
+parseButton = Button (bframe, width = "50" , text ="Parse the grammar", command = parseGrammar)
+parseButton.grid(row = 3, column = 0)
+
+firstButton = Button (bframe, width = "50" , text ="find the FIRST the non-terminals", command = first)
+firstButton.grid(row = 4, column = 0)
+
+followButton = Button (bframe, width = "50" , text ="FOLLOW for non-terminals", command = follow)
+followButton.grid(row = 5, column = 0)
+
+
+root.mainloop()
